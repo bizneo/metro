@@ -5,6 +5,8 @@ defmodule Metro do
 
   use Supervisor
 
+  alias Metro.Instrumenters
+
   def start(_, opts), do: start_link(opts)
 
   def start_link(opts) do
@@ -18,7 +20,8 @@ defmodule Metro do
     ]
 
     attach_telemetry!(opts)
-    Metro.RepoInstrumenter.setup()
+    Instrumenters.Ecto.setup()
+    Instrumenters.Phoenix.setup()
     Metro.Plug.setup()
 
     Supervisor.init(children, strategy: :one_for_one)
@@ -31,7 +34,7 @@ defmodule Metro do
       :telemetry.attach(
         "prometheus-ecto",
         [app_name, :repo, :query],
-        &Metro.RepoInstrumenter.handle_event/4,
+        &Instrumenters.Ecto.handle_event/4,
         nil
       )
   end
