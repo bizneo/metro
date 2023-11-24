@@ -7,8 +7,6 @@ defmodule Metro do
 
   require Logger
 
-  alias Metro.Instrumenters
-
   def start(_, opts), do: start_link(opts)
 
   def start_link(opts) do
@@ -17,16 +15,17 @@ defmodule Metro do
 
   @impl Supervisor
   def init(opts) do
+    port = Keyword.get(opts, :port, 9000)
+
     children = [
-      {Plug.Cowboy, scheme: :http, plug: Metro.Plug, options: [port: 9000]}
+      {Plug.Cowboy, scheme: :http, plug: Metro.Plug, options: [port: port]}
     ]
 
     attach_telemetry!(opts)
-    Instrumenters.Ecto.setup()
-    Instrumenters.Phoenix.setup()
+    Metro.EctoInstrumenter.setup()
     Metro.Plug.setup()
 
-    Logger.info("[Metro] Starting metrics endpoint at http://localhost:9000/metrics")
+    Logger.info("Running Metro at http://localhost:9000/metrics")
 
     Supervisor.init(children, strategy: :one_for_one)
   end
@@ -38,7 +37,7 @@ defmodule Metro do
       :telemetry.attach(
         "prometheus-ecto",
         [app_name, :repo, :query],
-        &Instrumenters.Ecto.handle_event/4,
+        &Metro.EctoInstrumenter.handle_event/4,
         nil
       )
   end
