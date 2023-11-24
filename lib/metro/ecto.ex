@@ -1,3 +1,3 @@
-defmodule Metro.EctoIntrumenter do
+defmodule Metro.EctoInstrumenter do
   use Prometheus.EctoInstrumenter
 end
