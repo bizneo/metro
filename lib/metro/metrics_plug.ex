@@ -1,3 +1,3 @@
-defmodule Metro.Plug do
+defmodule Metro.MetricsPlug do
   use Prometheus.PlugExporter
 end

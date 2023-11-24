@@ -24,7 +24,7 @@ defmodule Metro do
 
     attach_telemetry!(opts)
     Metro.EctoInstrumenter.setup()
-    Metro.Plug.setup()
+    Metro.MetricsPlug.setup()
 
     Supervisor.init(children, strategy: :one_for_one)
   end
