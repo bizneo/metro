@@ -19,7 +19,7 @@ defmodule Metro do
   @impl Supervisor
   def init(opts) do
     children = [
-      {Plug.Cowboy, scheme: :http, plug: Metro.Plug, options: [port: get_port(opts)]}
+      {Plug.Cowboy, scheme: :http, plug: Metro.Router, options: [port: get_port(opts)]}
     ]
 
     attach_telemetry!(opts)
