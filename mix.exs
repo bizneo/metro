@@ -1,13 +1,36 @@
 defmodule Metro.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/bizneo/metro"
+  @version "0.1.0"
+
   def project do
     [
       app: :metro,
-      version: "0.1.0",
-      elixir: "~> 1.15",
+      version: @version,
+      elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: description(),
+      package: package()
+    ]
+  end
+
+  defp description do
+    """
+    Plug and play Prometheus metrics of Erlang VM and Ecto for Elixir projects.
+    """
+  end
+
+  defp package do
+    [
+      maintainers: ["Bizneo Solutions"],
+      licenses: ["MIT"],
+      source_url: @source_url,
+      files: ~w(lib .formatter.exs mix.exs README* LICENSE*),
+      links: %{
+        "GitHub" => @source_url
+      }
     ]
   end
 
