@@ -5,6 +5,8 @@ defmodule Metro do
 
   use Supervisor
 
+  require Logger
+
   alias Metro.Instrumenters
 
   def start(_, opts), do: start_link(opts)
@@ -23,6 +25,8 @@ defmodule Metro do
     Instrumenters.Ecto.setup()
     Instrumenters.Phoenix.setup()
     Metro.Plug.setup()
+
+    Logger.info("[Metro] Starting metrics endpoint at http://localhost:9000/metrics")
 
     Supervisor.init(children, strategy: :one_for_one)
   end
